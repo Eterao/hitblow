@@ -7,6 +7,7 @@
 """
 
 from .core import judge, make_secret
+from .score import calc_score, get_rank
 
 
 def play(digits=3):
@@ -16,6 +17,7 @@ def play(digits=3):
     # ===== ① 開始時に足す（難易度・あいさつ など）: ここに書く =====
 
     tries = 0
+    hint_count = 0
     while True:
         guess = input("予想 > ").strip()
 
@@ -33,6 +35,12 @@ def play(digits=3):
         if hit == digits:
 
             # ===== ③ 勝利時に足す（スコア・履歴 など）: ここに書く =====
+            score = calc_score(tries, hint_count)
+            rank = get_rank(score)
+
+            print(f"スコア : {score} 点")
+            print(f"ランク : {rank}")
+
 
             print(f"正解！ {tries} 回で当たり（答え {secret}）")
             break
