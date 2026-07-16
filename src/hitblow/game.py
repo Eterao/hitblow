@@ -8,7 +8,7 @@
 
 from .core import judge, make_secret
 from .score import calc_score, get_rank
-
+from .hint import hint
 
 def play(digits=3):
     secret = make_secret(digits)
@@ -18,6 +18,7 @@ def play(digits=3):
 
     tries = 0
     hint_count = 0
+    shown_positions = []
     while True:
         guess = input("予想 > ").strip()
 
@@ -25,7 +26,19 @@ def play(digits=3):
         # 例:  from .hint import hint
         #      if guess == "h":
         #          print(hint(secret)); continue
+        if guess == "h":
+            result = hint(secret, shown_positions)
 
+            if result is None:
+                print("これ以上ヒントはありません")
+            else:
+                position, digit = result
+                shown_positions.append(position)
+                hint_count += 1
+                print(f"ヒント：答えには「{digit}」が含まれています")
+
+            continue
+        
         if len(guess) != digits or not guess.isdigit():
             print(f"{digits} 桁の数字で入力してね")
             continue
