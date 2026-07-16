@@ -17,6 +17,14 @@ def judge(secret, guess):
     return hits, common - hits
 
 
-def make_secret(digits=3):
-    """重複なしの digits 桁の答えを作る。"""
+def make_secret(digits=3, allow_duplicates=False):
+    """指定された桁数の答えを作る。
+
+    allow_duplicates が True なら重複あり、
+    Falseなら重複なしで作る。
+    """
+
+    if allow_duplicates:
+        return "".join(random.choices("0123456789", k=digits))
+
     return "".join(random.sample("0123456789", digits))
