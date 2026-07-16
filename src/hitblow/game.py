@@ -9,16 +9,27 @@
 from .core import judge, make_secret
 from .score import calc_score, get_rank
 from .hint import hint
+from .difficulty import select_difficulty
 
-def play(digits=3):
-    secret = make_secret(digits)
-    print(f"Hit & Blow（{digits} 桁・重複なし）")
-
+def play():
     # ===== ① 開始時に足す（難易度・あいさつ など）: ここに書く =====
+    difficulty = select_difficulty()
+
+    digits = difficulty["digits"]
+    allow_duplicates = difficulty["allow_duplicates"]
+
+    secret = make_secret(digits, allow_duplicates)
+
+    print()
+    print(f"難易度：{difficulty['name']}")
+    print(f"ルール：{difficulty['description']}")
+    print("Hit & Blowを開始します")
+
 
     tries = 0
     hint_count = 0
     shown_positions = []
+    
     while True:
         guess = input("予想 > ").strip()
 
@@ -38,7 +49,7 @@ def play(digits=3):
                 print(f"ヒント：答えには「{digit}」が含まれています")
 
             continue
-        
+
         if len(guess) != digits or not guess.isdigit():
             print(f"{digits} 桁の数字で入力してね")
             continue
