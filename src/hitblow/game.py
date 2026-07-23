@@ -75,9 +75,17 @@ def play():
         if hit == digits:
             # ===== ③ 勝利時に足す（スコア・履歴など） =====
             from .score import calc_score, get_rank
+            from .history import update_history
 
             score = calc_score(tries, hint_count)
             rank = get_rank(score)
+
+            updated, history, history_rank = update_history(
+                score,
+                difficulty["name"],
+                tries,
+                hint_count,
+            )
 
             print()
             print("========== 結果 ==========")
@@ -86,5 +94,22 @@ def play():
             print(f"ヒント使用回数：{hint_count}回")
             print(f"スコア：{score}点")
             print(f"ランク：{rank}")
-            print("==========================")
+
+            if updated:
+                print(f"記録更新！ スコア履歴の第{history_rank}位に入りました")
+            else:
+                print("上位5件の記録更新はありませんでした")
+
+            print()
+            print("===== スコア履歴 上位5件 =====")
+
+            for index, record in enumerate(history, start=1):
+                print(
+                    f"{index}位：{record['score']}点 "
+                    f"難易度={record['difficulty']} "
+                    f"挑戦={record['tries']}回 "
+                    f"ヒント={record['hint_count']}回"
+                )
+
+            print("==============================")
             break
